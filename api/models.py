@@ -19,6 +19,7 @@ class hackers(models.Model):
         (5,'5 - Expert'),
     )
     name = models.CharField(max_length=30, null=False)
+    password = models.CharField(max_length=30,default='pass@123', null=False)
     challenges = models.IntegerField(null=True)
     expert_python = models.IntegerField(choices=level_choice,null=True)
     expert_dsa = models.IntegerField(choices=level_choice,null=True)
@@ -34,7 +35,7 @@ class hackers(models.Model):
 
 class votes(models.Model):
     candidate = models.ForeignKey(hackers,on_delete=models.CASCADE)
-    ip_addr = models.GenericIPAddressField() 
+    who_voted = models.IntegerField(null=True)
     voted = models.BooleanField(default=False, blank=True, null=True)
     def __str__(self):
         params = {
