@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polls - Home</title>
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    {% if message %}
+        <h2>{{ message_info }}</h2>
+    {% endif %}
+    {% for c in candidates %}
+        <div class="hackers-container">
+            <div class="hacker">
+                <div class="hacker-preview">
+                    <img src="https://image.flaticon.com/icons/png/512/843/843280.png" width="130px" alt="">
+                    <h2>{{ c.name }}</h2>
+                </div>
+                <div class="hacker-info">
+                    <div class="challenges-container">
+                        <span class="challenge-text">
+                            {{ c.challenges }} Challenges Solved
+                        </span>
+                    </div>
+                    <h5>Votes - 
+                       {% for ind, val in indi_votes.items %}
+                            {% if ind == c.id %}
+                                {{ val }}
+                            {% endif %}
+                       {% endfor %}
+                       / {{ total_votes }}
+                    </h5>
+                    <h3>Skills - Experience</h3>
+                    <ul>
+                        <li>Python - {{c.expert_python}}</li>
+                        <li>DSA - {{c.expert_dsa}}</li>
+                        <li>C - {{c.expert_c}}</li>
+                        <li>Django - {{c.expert_django}}</li>
+                    </ul>
+                    {% if is_voted %}
+                        {% if voted == c.id %}
+                            <button class="btn vote-green" type="submit">Voted for {{ c.name }}</button>
+                        {% else %}
+                            <button class="btn vote-red" type="submit" disabled>Voting Limit Reached</button>
+                        {% endif %}
+
+                    {% else %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="text" name="candi_id" value="{{ c.id }}" hidden/>
+                            <button class="btn" type="submit">Vote for {{ c.name }}</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</body>
+</html>
